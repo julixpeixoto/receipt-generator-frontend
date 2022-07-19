@@ -13,8 +13,13 @@ export class CustomerDataComponent implements OnInit {
 
   nameCustomer!: string;
   emailCustomer!: string;
+  receipts: any[] = [{
+    date: "",
+    description: "",
+    value: ""
+  }];
   filePath!: Observable<any>;
-  response!: any;
+  response!: any;  
 
   constructor(private receiptService: ReceiptService) {}
 
@@ -25,18 +30,7 @@ export class CustomerDataComponent implements OnInit {
     const data = {
       customerName: this.nameCustomer,
       customerEmail: this.emailCustomer,
-      receipts: [
-          {
-              date: "2022-05-14",
-              description: "assistencia",
-              value: "40.00"
-          },
-          {
-              date: "2022-06-15",
-              description: "assistencia 2",
-              value: "50.00"
-          }
-      ]
+      receipts: this.receipts
     }
 
     this.receiptService.sendData(data).subscribe((response) => {
@@ -44,6 +38,17 @@ export class CustomerDataComponent implements OnInit {
         this.filePath = this.response.file;
     });
 
+  }
+
+  addService(){
+    const receipt = 
+    {
+        date: "",
+        description: "",
+        value: ""
+    }
+    
+    this.receipts.push(receipt);
   }
 
 }
