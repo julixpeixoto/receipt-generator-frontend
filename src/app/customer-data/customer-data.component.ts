@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {NgForm} from '@angular/forms';
 import { Observable } from 'rxjs/internal/Observable';
-import { Response } from '../model/response.model';
 import { ReceiptService } from '../service/receipt.service';
+import { Error } from '../model/error.model';
 
 @Component({
   selector: 'app-customer-data',
@@ -20,6 +19,7 @@ export class CustomerDataComponent implements OnInit {
   }];
   filePath!: Observable<any>;
   response!: any;  
+  error!: Error;
 
   constructor(private receiptService: ReceiptService) {}
 
@@ -36,8 +36,10 @@ export class CustomerDataComponent implements OnInit {
     this.receiptService.sendData(data).subscribe((response) => {
         this.response = response;
         this.filePath = this.response.file;
+    },
+    (err) => { 
+      this.error = err.error;
     });
-
   }
 
   addService(){
@@ -51,4 +53,7 @@ export class CustomerDataComponent implements OnInit {
     this.receipts.push(receipt);
   }
 
+  disableAlert(){
+    this.error = <Error>{}
+  }
 }
