@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReceiptService } from '../service/receipt.service';
 import { Error } from '../model/error.model';
+import { Response } from '../model/response.model';
 
 @Component({
   selector: 'app-customer-data',
@@ -17,7 +18,7 @@ export class CustomerDataComponent implements OnInit {
     description: "",
     value: ""
   }];
-  filePath!: Observable<any>;
+  filePath: string | undefined = "";
   response!: any;  
   error!: Error;
   loading!: boolean;
@@ -36,14 +37,14 @@ export class CustomerDataComponent implements OnInit {
       receipts: this.receipts
     }
 
-    this.receiptService.sendData(data).subscribe((response) => {
-        this.response = response;
-        this.filePath = this.response.file;
+    this.receiptService.sendData(data).subscribe((response: Response) => {
+        this.filePath = response.file;
         this.loading = false;
     },
     (err) => { 
       this.error = err.error;
       this.loading = false;
+      this.filePath = "";
     });
   }
 
@@ -59,6 +60,6 @@ export class CustomerDataComponent implements OnInit {
   }
 
   disableAlert(){
-    this.error = <Error>{}
+    this.error = <Error>{};    
   }
 }
