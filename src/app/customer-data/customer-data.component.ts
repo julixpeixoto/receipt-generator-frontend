@@ -20,6 +20,7 @@ export class CustomerDataComponent implements OnInit {
   filePath!: Observable<any>;
   response!: any;  
   error!: Error;
+  loading!: boolean;
 
   constructor(private receiptService: ReceiptService) {}
 
@@ -27,6 +28,8 @@ export class CustomerDataComponent implements OnInit {
   }
 
   generate(){
+    this.loading = true;
+
     const data = {
       customerName: this.nameCustomer,
       customerEmail: this.emailCustomer,
@@ -36,9 +39,11 @@ export class CustomerDataComponent implements OnInit {
     this.receiptService.sendData(data).subscribe((response) => {
         this.response = response;
         this.filePath = this.response.file;
+        this.loading = false;
     },
     (err) => { 
       this.error = err.error;
+      this.loading = false;
     });
   }
 
